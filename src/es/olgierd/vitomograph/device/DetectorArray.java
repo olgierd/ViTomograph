@@ -8,12 +8,23 @@ public class DetectorArray {
 	
 	
 	
-	public DetectorArray(int numberOfDetectors) {
+	public DetectorArray(int numberOfDetectors, double radius, double beamWidth) {
+		
 		detectorList = new ArrayList<Detector>();
 		
+		Detector temp;
+		double temp_angle;
 		
 		for (int i = 0; i < numberOfDetectors; i++) {
-			detectorList.add(new Detector());
+			
+			temp = new Detector();
+			temp.ID = i;
+			
+			temp_angle = (180 - ((float)i / numberOfDetectors) * beamWidth) - beamWidth/2;
+			temp.setAngularLocation(temp_angle);
+			temp.calculateLocation();
+			
+			detectorList.add(temp);
 		}
 		
 	}
