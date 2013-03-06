@@ -39,13 +39,12 @@ public class ViTomograph  {
 		
 		BufferedImage inputImg = null;
 		
-		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\qm.png"));
-		
-		
-		t = new Tomograph(inputImg, 11, 180);
-		
+		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\an_idiot.png"));
+
+		t = new Tomograph(inputImg, 40, 120);
+
 		initGui();
-		
+
 	}
 	
 	

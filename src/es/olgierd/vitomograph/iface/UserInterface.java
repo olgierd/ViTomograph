@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import es.olgierd.vitomograph.device.Element;
 import es.olgierd.vitomograph.device.Tomograph;
@@ -37,11 +40,10 @@ public class UserInterface extends JPanel {
 		g.setColor(Color.red);
 		Point lamp = t.getLampLocation();
 		
-		
-		g.fillOval(lamp.x-2, lamp.y-2, 4, 4);
+		g.fillOval(lamp.x-3, lamp.y-3, 6, 6);
 	}
 	
-	public UserInterface(Tomograph t) {
+	public UserInterface(final Tomograph t) {
 
 		this.t = t;
 		
@@ -50,6 +52,24 @@ public class UserInterface extends JPanel {
 		Button test = new Button("test");
 		test.setBounds(10, 10, 100, 30);		
 //		add(test);
+		
+		final JSlider rotationSlider = new JSlider(0, 360);
+		rotationSlider.setBounds(400, 10, 250, 40);
+		
+		rotationSlider.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				t.rotateToAngle(rotationSlider.getValue());
+				repaint();
+			}
+		});
+		
+		
+		
+		add(rotationSlider);
+		
+		
 		
 //		repaint();
 		

@@ -7,7 +7,7 @@ public class Lamp extends Element {
 	public Lamp(double radius) {
 		lightIntensity = 0;
 		setRadius(radius);
-		setAngularLocation(0);
+		setAngularLocation(1);
 	}
 	
 	public void setIntensity(double intensity) {

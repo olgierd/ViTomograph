@@ -12,7 +12,8 @@ public class Tomograph {
 	private Lamp lamp;
 	private DetectorArray detectorarray;
 	private double radius;
-	private double rotationAngle;
+	private BufferedImage outputImage;
+	
 	
 	public Tomograph(BufferedImage img, int numberOfDetectors, double beamWidth) {
 		
@@ -51,10 +52,8 @@ public class Tomograph {
 	
 	public void rotateToAngle(double angle) {
 		
-		double diff = rotationAngle - angle;
-		
-		detectorarray.rotateToAngle(diff);
-		lamp.setAngularLocation(angle);
+		detectorarray.rotateToAngle(angle);
+		lamp.setRotationAngle(angle);
 	}
 	
 	public BufferedImage getImage() {

@@ -6,6 +6,7 @@ public abstract class Element {
 
 	private double x, y; 
 	private double angularLocation;
+	private double rotationAngle;
 	private double radius;
 	
 	public void setRadius(double radius) {
@@ -19,7 +20,7 @@ public abstract class Element {
 	public void calculateLocation() {
 	
 		
-		double radianAngle = Math.toRadians(angularLocation);
+		double radianAngle = Math.toRadians(angularLocation + rotationAngle);
 		
 		x = Math.sin(radianAngle) * radius;
 		y = Math.cos(radianAngle) * radius;
@@ -39,5 +40,9 @@ public abstract class Element {
 		calculateLocation();
 	}
 	
+	public void setRotationAngle(double angle) {
+		rotationAngle = angle;
+		calculateLocation();
+	}
 	
 }

@@ -39,7 +39,7 @@ public class DetectorArray {
 	public void rotateToAngle(double angle) {
 		
 		for(Detector d : detectorList) {
-			d.setAngularLocation(d.getAngularRotation());
+			d.setRotationAngle(angle);
 		}
 		
 	}
