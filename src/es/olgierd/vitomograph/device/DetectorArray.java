@@ -1,4 +1,4 @@
-package es.olgierd.vitomograph;
+package es.olgierd.vitomograph.device;
 
 import java.util.ArrayList;
 

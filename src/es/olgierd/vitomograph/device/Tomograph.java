@@ -1,9 +1,10 @@
-package es.olgierd.vitomograph;
+package es.olgierd.vitomograph.device;
 
 import java.util.ArrayList;
 
 public class Tomograph {
 
+	
 	private Lamp lamp;
 	
 	
@@ -12,9 +13,6 @@ public class Tomograph {
 		
 		
 	}
-	
-	
-	
 	
 	
 }
