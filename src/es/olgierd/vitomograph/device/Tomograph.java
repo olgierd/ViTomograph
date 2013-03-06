@@ -1,8 +1,10 @@
 package es.olgierd.vitomograph.device;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tomograph {
 
@@ -10,24 +12,56 @@ public class Tomograph {
 	private Lamp lamp;
 	private DetectorArray detectorarray;
 	private double radius;
+	private double rotationAngle;
 	
 	public Tomograph(BufferedImage img, int numberOfDetectors, double beamWidth) {
 		
 		this.img = img;
-		getRadius();
+		calculateRadius();
 		
+		System.out.println(img.getHeight() + " " + img.getWidth());
 		
 		lamp = new Lamp(radius);
 		detectorarray = new DetectorArray(numberOfDetectors, radius, beamWidth);
 		
 	}
 
-	private double getRadius() {
+	private void calculateRadius() {
 		
 		double x = img.getWidth(), y = img.getHeight();
 		
-		return Math.sqrt(x*x + y*y) / 2;
+		radius = Math.sqrt(x*x + y*y) / 2;
 		
 	}
 	
+	public ArrayList<Point> getDetectorsLocation() {
+		
+		ArrayList<Point> locations = new ArrayList<Point>();
+		
+		for(Detector det : detectorarray.getDetectors()) {
+			locations.add(det.getLocation());
+		}
+		
+		return locations;
+	}
+	
+	public Point getLampLocation() {
+		return lamp.getLocation();
+	}
+	
+	public void rotateToAngle(double angle) {
+		
+		double diff = rotationAngle - angle;
+		
+		detectorarray.rotateToAngle(diff);
+		lamp.setAngularLocation(angle);
+	}
+	
+	public BufferedImage getImage() {
+		return img;
+	}
+	
+	public double getRadius() {
+		return radius;
+	}
 }
