@@ -6,6 +6,8 @@ import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -27,9 +29,7 @@ public class UserInterface extends JPanel {
 		
 		g.setColor(Color.black);
 		
-		int imgloc = (int) (Math.sqrt(2 * t.getRadius()*t.getRadius()) - t.getRadius());
-		
-		g.drawImage(t.getImage(), imgloc, imgloc, null);
+		g.drawImage(t.getImage(), t.getPicLocation().x, t.getPicLocation().y, null);
 		
 		ArrayList<Point> detectors = t.getDetectorsLocation();
 		
@@ -50,8 +50,18 @@ public class UserInterface extends JPanel {
 		setLayout(null);
 		
 		Button test = new Button("test");
-		test.setBounds(10, 10, 100, 30);		
-//		add(test);
+		test.setBounds(500, 80, 100, 30);		
+		add(test);
+		
+		test.addActionListener(new ActionListener() {
+		    
+		    @Override
+		    public void actionPerformed(ActionEvent arg0) {
+			t.makeLine();
+			repaint();
+		    }
+		});
+		
 		
 		final JSlider rotationSlider = new JSlider(0, 360);
 		rotationSlider.setBounds(400, 10, 250, 40);

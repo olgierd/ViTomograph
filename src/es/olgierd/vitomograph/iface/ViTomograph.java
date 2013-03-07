@@ -39,9 +39,10 @@ public class ViTomograph  {
 		
 		BufferedImage inputImg = null;
 		
-		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\an_idiot.png"));
+		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
 
-		t = new Tomograph(inputImg, 40, 120);
+		t = new Tomograph(inputImg, 4, 40);
+		t.makeLine();
 
 		initGui();
 
