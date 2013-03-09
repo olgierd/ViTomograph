@@ -41,6 +41,12 @@ public class UserInterface extends JPanel {
 		Point lamp = t.getLampLocation();
 		
 		g.fillOval(lamp.x-3, lamp.y-3, 6, 6);
+		
+		
+
+		g.drawImage(t.getOutputRawImage(), 200, 400, null);
+		g.drawImage(t.getOutputImage(), 900, 10, null);
+		
 	}
 	
 	public UserInterface(final Tomograph t) {
@@ -57,24 +63,43 @@ public class UserInterface extends JPanel {
 		    
 		    @Override
 		    public void actionPerformed(ActionEvent arg0) {
-			t.makeLine();
+			t.makeOutputImage();
 			repaint();
 		    }
 		});
 		
 		
+		Button fullCapture = new Button("FULL");
+		fullCapture.setBounds(590, 80, 100, 30);		
+		add(test);
+		
+		fullCapture.addActionListener(new ActionListener() {
+		    
+		    @Override
+		    public void actionPerformed(ActionEvent arg0) {
+			t.doFullCapture();
+			t.makeOutputImage();
+			repaint();
+		    }
+		});
+		
+		add(fullCapture);
+		
+		
 		final JSlider rotationSlider = new JSlider(0, 360);
-		rotationSlider.setBounds(400, 10, 250, 40);
+		rotationSlider.setBounds(430, 10, 400, 40);
+		rotationSlider.setValue(0);
 		
 		rotationSlider.addChangeListener(new ChangeListener() {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				t.rotateToAngle(rotationSlider.getValue());
+//				t.drawLine();
+				t.getLine();
 				repaint();
 			}
 		});
-		
 		
 		
 		add(rotationSlider);

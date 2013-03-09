@@ -27,7 +27,7 @@ public class ViTomograph  {
 		content.add(gui);
 		
 		window.setTitle("ViTomograph by Olgierd Pilarczyk & Krzysztof Surdyk");
-		window.setSize(700, 550);
+		window.setSize(2000, 1300);
 		window.setResizable(false);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,10 +39,12 @@ public class ViTomograph  {
 		
 		BufferedImage inputImg = null;
 		
+//		inputImg = ImageIO.read(new File("/home/oli/tomo.png"));
+//		inputImg = ImageIO.read(new File("/home/oli/tomo2.png"));
+//		inputImg = ImageIO.read(new File("/home/oli/dsc02249.png"));
 		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
 
-		t = new Tomograph(inputImg, 40, 90);
-		t.makeLine();
+		t = new Tomograph(inputImg, 1500, 270);
 
 		initGui();
 

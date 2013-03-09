@@ -11,59 +11,47 @@ public class Helpers {
 	ArrayList<Point> line = new ArrayList<Point>();
 	
 	int dx = A.x - B.x;
-	int dy = B.x - B.y;
-	
+	int dy = A.y - B.y;
 	
 	double coeff = 0.0;
 	int direction = 0;
 	
 	if(Math.abs(dx) > Math.abs(dy)) {	// X is longer - X will be the slow direction
 	    
-	    coeff = dx / dy;
+	    coeff = (double)dy / dx;
+
+	    if(A.x < B.x) 
+		direction = 1;
+	    else 
+		direction = -1;
 	    
-	    
-	    if(A.x < B.x) coeff = 1;
-	    else coeff = -1;
-	    
-	    
-	    
-	    for(int i = 0; i <= dx; i += coeff) {
-		
-		line.add(new Point (
-					A.x+i,
-					2
-					)
-				    );
-		
-		
-	    }
-	    
-		
-	    
-	    
-	    
+	    for(int i = 0; i <= Math.abs(dx); i++)
+		line.add( new Point (A.x + i * direction, A.y + (int)(direction * i * coeff + 0.5) ) );
 	    
 	} else {     // Y is longer - Y will be the slow direction
 	    
-	    coeff = dy / dx;
+	    coeff = (double)dx / dy;
 	    
+	    if(A.y < B.y) 
+		direction = 1;
+	    else 
+		direction = -1;
 	    
-	    
-	    
+	    for(int i = 0; i <= Math.abs(dy); i++)
+		line.add( new Point (A.x + (int)(direction * i * coeff + 0.5), A.y + i * direction ) );
 	    
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	return line;
+    }
+    
+    public static int rgbToGreyscale(int value) {
+	
+	return (value & 0xff) + ((value >> 8) & 0xff) + ((value >> 16) & 0xff);
 	
     }
+    
+    
     
     
     

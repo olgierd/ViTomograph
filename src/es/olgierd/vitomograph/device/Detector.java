@@ -6,11 +6,20 @@ public class Detector extends Element {
 	private double value;
 	
 	public void setValue(double newVal) {
-		value = newVal;
+	    value = newVal;
+	}
+	
+	public void addValue(double val) {
+	    value += val;
 	}
 	
 	public double getValue() {
-		return value;
+	    return value;
 	}
+	
+	public void reset() {
+	    value = 0;	    
+	}
+	
 	
 }
