@@ -41,7 +41,7 @@ public class ViTomograph  {
 		
 		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
 
-		t = new Tomograph(inputImg, 4, 40);
+		t = new Tomograph(inputImg, 40, 90);
 		t.makeLine();
 
 		initGui();
