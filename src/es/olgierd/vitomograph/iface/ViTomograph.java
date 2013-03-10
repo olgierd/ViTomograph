@@ -45,8 +45,7 @@ public class ViTomograph  {
 //		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
 		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\op798739.jpg"));
 		
-
-		t = new Tomograph(inputImg, 500, 180, 500);
+		t = new Tomograph(inputImg, 500, 180, 90);
 
 		initGui();
 

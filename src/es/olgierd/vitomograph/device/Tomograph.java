@@ -2,6 +2,7 @@ package es.olgierd.vitomograph.device;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +31,13 @@ public class Tomograph {
 		this.img = img;
 		calculateRadius(distance);
 
-		System.out.println(img.getHeight() + " " + img.getWidth());
-
 		lamp = new Lamp(radius);
 		detectorarray = new DetectorArray(numberOfDetectors, radius, beamWidth);
 
 		outputImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
 		outputImageRaw = new BufferedImage(numberOfDetectors, 361, BufferedImage.TYPE_INT_RGB);
 
-		resultsTab = new double[img.getWidth()][img.getHeight()];
+		resultsTab = new double[img.getWidth() + 2][img.getHeight() + 2];
 		calculated = new boolean[361];
 
 	}
@@ -170,7 +169,7 @@ public class Tomograph {
 
 	}
 
-	public void drwawLine(BufferedImage pic, Point from, Point to, int color) {
+	public void drawLine(BufferedImage pic, Point from, Point to, int color) {
 
 		ArrayList<Point> points = Helpers.getLine(from, to);
 
@@ -189,41 +188,57 @@ public class Tomograph {
 
 	}
 	
-	public void drawSoftLine(BufferedImage pic, Point from, Point to, int color) {
-
-		ArrayList<Point> points = Helpers.getLine(from, to);
-
-		int i, j;
-
-		for (Point p : points) {
-			i = p.x - picLocation.x;
-			j = p.y - picLocation.y;
-
-			if (i > 0 && j > 0 && i < pic.getWidth() && j < pic.getHeight()) {
-				resultsTab[i][j] += color;
-				pic.setRGB(i, j, color);
-			}
-
-		}
-
-	}
+	// integer-based
+//	public void drawToResultTable(Point from, Point to, double color) {
+//
+//		if (calculated[rotationAngle])
+//			return;
+//
+//		ArrayList<Point> points = Helpers.getLine(from, to);
+//
+//		int i, j;
+//
+//		for (Point p : points) {
+//			i = p.x - picLocation.x;
+//			j = p.y - picLocation.y;
+//
+//			if (i > 0 && j > 0 && i < outputImage.getWidth() && j < outputImage.getHeight()) {
+//				resultsTab[i][j] += color;
+//			}
+//
+//		}
+//
+//	}
 	
-
+	// double-based
 	public void drawToResultTable(Point from, Point to, double color) {
 
 		if (calculated[rotationAngle])
 			return;
 
-		ArrayList<Point> points = Helpers.getLine(from, to);
+//		ArrayList<Point> points = Helpers.getLine(from, to);
+		
+		ArrayList<Point2D.Double> points = Helpers.getSoftLine(from, to);
 
-		int i, j;
+		double i, j;
 
-		for (Point p : points) {
+		for (Point2D.Double p : points) {
 			i = p.x - picLocation.x;
 			j = p.y - picLocation.y;
 
 			if (i > 0 && j > 0 && i < outputImage.getWidth() && j < outputImage.getHeight()) {
-				resultsTab[i][j] += color;
+				
+				if( i % 1 == 0 ) {
+					resultsTab[(int)i][(int)j] += color * (1-(j%1));
+					resultsTab[(int)i][(int)j+1] += color * (j%1);
+				}
+				
+				if( j % 1 == 0 ) {
+					resultsTab[(int)i][(int)j] += color * (1-(i%1));
+					resultsTab[(int)i+1][(int)j] += color * (i%1);
+				}
+				
+				
 			}
 
 		}
@@ -246,7 +261,11 @@ public class Tomograph {
 		for (int i = 0; i < img.getWidth(); i++) {
 			for (int j = 0; j < img.getHeight(); j++) {
 				val = (int) ((resultsTab[i][j] * 255) / max);
-				outputImage.setRGB(i, j, val + (val << 8) + (val << 16));
+				
+				val = val + (val << 8) + (val << 16);
+				outputImage.setRGB(i, j, val);
+				
+				
 			}
 		}
 	}
@@ -264,8 +283,9 @@ public class Tomograph {
 			getLine();
 
 			loopend = System.currentTimeMillis();
-			System.out.println((int) (100 * i / 360) + "% # Processing time (" + i + "/360): " + (loopend - loopstart));
+			System.out.println((int) (100 * i / 360) + "% # (" + i + "/360) # Processing time: " + (loopend - loopstart) + "ms #  ETA: " + (loopend - loopstart)*(360-i)/1000.0 + " seconds");
 		}
+		
 		System.out.println("Processing took: " + (loopend - start));
 	}
 

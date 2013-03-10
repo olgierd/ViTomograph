@@ -114,6 +114,25 @@ public class UserInterface extends JPanel {
 		contrastSub.setBounds(1340, 20, 300, 30);
 		contrastMul.setBounds(1340, 55, 300, 30);
 		
+		contrastMul.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				t.fixOutputContrast(contrastSub.getValue(), contrastMul.getValue()/150.0);
+				repaint();
+			}
+		});
+		
+		contrastSub.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				t.fixOutputContrast(contrastSub.getValue(), contrastMul.getValue()/150.0);
+				repaint();
+			}
+		});
+		
+		
 		add(contrastMul);
 		add(contrastSub);
 		
