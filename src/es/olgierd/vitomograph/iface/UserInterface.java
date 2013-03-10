@@ -105,6 +105,32 @@ public class UserInterface extends JPanel {
 		add(rotationSlider);
 		
 		
+		final JSlider contrastSub = new JSlider(0, 1000);
+		final JSlider contrastMul = new JSlider(1, 255);
+		
+		contrastSub.setValue(0);
+		contrastMul.setValue(1);
+		
+		contrastSub.setBounds(1340, 20, 300, 30);
+		contrastMul.setBounds(1340, 55, 300, 30);
+		
+		add(contrastMul);
+		add(contrastSub);
+		
+		Button applyContrast = new Button("Fix contrast");
+		applyContrast.setBounds(1380, 95, 100, 25);
+		
+		applyContrast.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				t.fixOutputContrast(contrastSub.getValue(), contrastMul.getValue()/150.0);
+				repaint();
+			}
+		});
+		
+		add(applyContrast);
+		
 		
 //		repaint();
 		

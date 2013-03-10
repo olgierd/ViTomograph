@@ -42,9 +42,11 @@ public class ViTomograph  {
 //		inputImg = ImageIO.read(new File("/home/oli/tomo.png"));
 //		inputImg = ImageIO.read(new File("/home/oli/tomo2.png"));
 //		inputImg = ImageIO.read(new File("/home/oli/dsc02249.png"));
-		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
+//		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
+		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\op798739.jpg"));
+		
 
-		t = new Tomograph(inputImg, 1500, 270);
+		t = new Tomograph(inputImg, 500, 180, 500);
 
 		initGui();
 
