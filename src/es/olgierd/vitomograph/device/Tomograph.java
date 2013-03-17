@@ -110,15 +110,26 @@ public class Tomograph {
 	public void getLine() {
 
 		int tab[] = new int[detectorarray.getDetectors().size()];
-
+		double vals[] = new double[detectorarray.getDetectors().size() + 20];
+		
+		
 		int i = 0;
 		for (Detector d : detectorarray.getDetectors()) {
 			calculateSingleDetector(d);
 			tab[i] = (int) d.getValue();
-			drawToResultTable(lamp.getLocation(), d.getLocation(), d.getValue());
+			vals[i] = (int) d.getValue();
 			i++;
 		}
-
+		
+		i = 0;
+		
+//		vals = Helpers.filterSignal(vals);
+		
+		for (Detector d : detectorarray.getDetectors()) {
+		    drawToResultTable(lamp.getLocation(), d.getLocation(), vals[i]);
+		    i++;
+		}
+//
 		int max = -1;
 
 		for (i = 0; i < tab.length; i++)
@@ -135,7 +146,8 @@ public class Tomograph {
 		for (i = 0; i < tab.length; i++) {
 			outputImageRaw.setRGB(i, rotationAngle, tab[i] + (tab[i] << 8) + (tab[i] << 16));
 
-		}
+		}		
+		//
 
 		calculated[rotationAngle] = true;
 
@@ -148,22 +160,41 @@ public class Tomograph {
 		from = lamp.getLocation();
 		to = d.getLocation();
 
-		ArrayList<Point> points = Helpers.getLine(from, to);
+		ArrayList<Point2D.Double> points = Helpers.getSoftLine(from, to);
 
-		int i, j;
+		double i, j;
 
 		d.reset();
+		
+		double value;
 
-		for (Point p : points) {
+		for (Point2D.Double p : points) {
 			i = p.x - picLocation.x;
 			j = p.y - picLocation.y;
+			
+			value = 0;
 
 			if (i > 0 && j > 0 && i < img.getWidth() && j < img.getHeight()) {
-				d.addValue(Helpers.rgbToGreyscale(img.getRGB(i, j)));
+			    
+			    	if( i % 1 == 0 && (int)i < img.getWidth()-1 &&  (int)j < img.getHeight()-1) {
+			    	    value = Helpers.rgbToGreyscale(img.getRGB((int)i, (int)j)) * (1-(j%1));
+			    	    value += Helpers.rgbToGreyscale(img.getRGB((int)i, (int)j+1)) * (j%1);
+				}
+				
+				if( j % 1 == 0 && (int)i < img.getWidth()-1 &&  (int)j < img.getHeight()-1) {
+				    value = Helpers.rgbToGreyscale(img.getRGB((int)i, (int)j)) * (1-(i%1));
+				    value += Helpers.rgbToGreyscale(img.getRGB((int)i+1, (int)j)) * (i%1);
+				}
 			}
+
+			if((int)i < img.getWidth() &&  (int)j < img.getHeight()) {
+			    d.addValue(value);
+			}
+			
 
 		}
 
+		
 		// drawLine(outputImage, lamp.getLocation(), d.getLocation(),
 		// (int)d.getValue());
 
@@ -234,8 +265,8 @@ public class Tomograph {
 				}
 				
 				if( j % 1 == 0 ) {
-					resultsTab[(int)i][(int)j] += color * (1-(i%1));
-					resultsTab[(int)i+1][(int)j] += color * (i%1);
+				    resultsTab[(int)i][(int)j] += color * (1-(i%1));
+				    resultsTab[(int)i+1][(int)j] += color * (i%1);
 				}
 				
 				
@@ -294,7 +325,6 @@ public class Tomograph {
 		makeOutputImage();
 
 		int val;
-		
 		
 		for (int i = 0; i < img.getWidth(); i++) {
 			for (int j = 0; j < img.getHeight(); j++) {

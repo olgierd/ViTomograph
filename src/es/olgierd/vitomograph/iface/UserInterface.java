@@ -97,6 +97,7 @@ public class UserInterface extends JPanel {
 				t.rotateToAngle(rotationSlider.getValue());
 //				t.drawLine();
 				t.getLine();
+				t.makeOutputImage();
 				repaint();
 			}
 		});
@@ -105,7 +106,7 @@ public class UserInterface extends JPanel {
 		add(rotationSlider);
 		
 		
-		final JSlider contrastSub = new JSlider(0, 1000);
+		final JSlider contrastSub = new JSlider(-1000, 1000);
 		final JSlider contrastMul = new JSlider(1, 255);
 		
 		contrastSub.setValue(0);

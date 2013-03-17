@@ -35,17 +35,18 @@ public class ViTomograph  {
 	
 	public static void main(String args[]) throws IOException {
 		
-		System.out.println("Welcome!");
-		
 		BufferedImage inputImg = null;
 		
 //		inputImg = ImageIO.read(new File("/home/oli/tomo.png"));
 //		inputImg = ImageIO.read(new File("/home/oli/tomo2.png"));
 //		inputImg = ImageIO.read(new File("/home/oli/dsc02249.png"));
-//		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
-		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\op798739.jpg"));
+		inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
+//		inputImg = ImageIO.read(new File("C:\\Users\\op798739\\Desktop\\MISC\\op798739.jpg"));
+//		inputImg = ImageIO.read(new File("/home/oli/tomo3.png"));
+//		inputImg = ImageIO.read(new File("/home/oli/phantom.gif"));
+//		inputImg = ImageIO.read(new File("/home/oli/tomo4.png"));
 		
-		t = new Tomograph(inputImg, 500, 180, 90);
+		t = new Tomograph(inputImg, 300, 180, 90);
 
 		initGui();
 

@@ -96,5 +96,46 @@ public class Helpers {
 		return (value & 0xff) + ((value >> 8) & 0xff) + ((value >> 16) & 0xff);
 
 	}
+	
+	public static double[] convoluteSignals(double a[], double b[]) {
+	    
+	    double outputTab[] = new double[a.length + b.length - 1];
+	    
+	    for(int i=0; i<a.length; i++) {
+		for(int j=0; j<b.length; j++) {
+		    outputTab[i+j] += a[i] * b[j];
+		}
+	    }
+	    
+	    return outputTab;
+	}
 
+	public static double[] makeFilter(int length) {
+
+	    double filter[] = new double[11];
+//	    double filter[] = { -0.3, 1, -0.3 };
+		
+		//make filter
+		
+		for(int x=-5; x<5; x++) {
+		    
+		    if(x%2 == 1) {
+			filter[x+5] = (-4/(Math.PI*Math.PI))/(x*x);
+		    }
+		    else if (x%2 == 0) {
+			filter[x+5] = 0;
+		    }
+		    
+		}
+	    filter[6] = 1;
+	    
+	    return filter;
+	}
+	
+	public static double[] filterSignal(double tab[]) {
+
+	    return convoluteSignals(tab, makeFilter(tab.length));
+	    
+	}
 }
+
