@@ -44,8 +44,10 @@ public class UserInterface extends JPanel {
 		
 		
 
-		g.drawImage(t.getOutputRawImage(), 200, 400, null);
+		g.drawImage(t.getOutputRawImage(), 900, 400, null);
 		g.drawImage(t.getOutputImage(), 900, 10, null);
+		g.drawImage(t.getCurrentImage(), 300, 450, null);
+		
 		
 	}
 	
