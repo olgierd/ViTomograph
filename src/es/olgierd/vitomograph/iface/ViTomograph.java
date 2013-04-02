@@ -1,12 +1,16 @@
 package es.olgierd.vitomograph.iface;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.print.attribute.standard.MediaSize.Other;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,17 +43,23 @@ public class ViTomograph {
 		controlImageWindow = new JFrame();
 
 		Insets ins;
+		Dimension d;
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension screenSize = tk.getScreenSize();
 
 		inputImagePanel = new InputPanel(t);
 		inputImageWindow.add(inputImagePanel);
 
-		inputImageWindow
-				.setTitle("Input image");
+		inputImageWindow.setTitle("Input image");
 		inputImageWindow.setVisible(true);
 		ins = inputImageWindow.getInsets();
-		inputImageWindow.setSize(700, 500);
+		d = inputImagePanel.getSize();
+		inputImageWindow.setSize(d.width + ins.left + ins.right, d.height
+				+ ins.top + ins.bottom);
 		inputImageWindow.setResizable(false);
 		inputImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		inputImageWindow.setLocation(
+				screenSize.width - inputImageWindow.getSize().width, 0);
 
 		outputImagePanel = new OutputPanel(t);
 		outputImageWindow.add(outputImagePanel);
@@ -61,6 +71,9 @@ public class ViTomograph {
 				+ ins.top + ins.bottom);
 		outputImageWindow.setResizable(false);
 		outputImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		outputImageWindow
+				.setLocation(screenSize.width / 2
+						- outputImageWindow.getSize().width / 2, 0);
 
 		rawImagePanel = new RawPanel(t);
 		rawImageWindow.add(rawImagePanel);
@@ -72,16 +85,20 @@ public class ViTomograph {
 				+ 260 + 10 + ins.top + ins.bottom);
 		rawImageWindow.setResizable(false);
 		rawImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		rawImageWindow.setLocation(0, 0);
 
 		controlImagePanel = new ControlPanel(t);
 		controlImageWindow.add(controlImagePanel);
 
-		controlImageWindow.setTitle("ViTomograph by Olgierd Pilarczyk & Krzysztof Surdyk");
+		controlImageWindow
+				.setTitle("ViTomograph by Olgierd Pilarczyk & Krzysztof Surdyk");
 		controlImageWindow.setVisible(true);
 		ins = controlImageWindow.getInsets();
 		controlImageWindow.setSize(500, 300);
 		controlImageWindow.setResizable(false);
 		controlImageWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		controlImageWindow.setLocation(screenSize.width / 2
+				- controlImageWindow.getSize().width / 2, outputImageWindow.getSize().width+100);
 	}
 
 	static void repaintWindows() {

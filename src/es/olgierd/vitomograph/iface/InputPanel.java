@@ -3,8 +3,10 @@ package es.olgierd.vitomograph.iface;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +24,8 @@ import es.olgierd.vitomograph.device.Tomograph;
 public class InputPanel extends JPanel {
 
 	Tomograph t;
+	int width;
+	int height;
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -42,10 +46,19 @@ public class InputPanel extends JPanel {
 		Point lamp = t.getLampLocation();
 
 		g.fillOval(lamp.x - 3, lamp.y - 3, 6, 6);
+
 	}
 
 	public InputPanel(final Tomograph t) {
+		Image img = t.getImage();
+		Point point = t.getPicLocation();
+		width = point.x * 2 + img.getWidth(null);
+		height = point.y * 2 + img.getHeight(null);
 		this.t = t;
 	}
 
+	@Override
+	public Dimension getSize() {
+		return new Dimension(width, height);
+	}
 }
