@@ -360,8 +360,6 @@ public class Tomograph {
 		val -= sub;
 		val = (int) (val * mul);
 
-		// System.out.println("multiplier:" + mul);
-
 		if (val > 255)
 		    val = 255;
 		if (val < 0)

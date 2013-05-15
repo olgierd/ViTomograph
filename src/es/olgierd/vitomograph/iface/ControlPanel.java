@@ -23,7 +23,7 @@ public class ControlPanel extends JPanel {
 
 		setLayout(new GridLayout(7, 1));
 
-		add(new JLabel("sterowanie tmografem"));
+		add(new JLabel("sterowanie tomografem"));
 
 		JPanel tmpPanel = new JPanel();
 		tmpPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
