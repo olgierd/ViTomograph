@@ -1,20 +1,18 @@
 package es.olgierd.vitomograph.device;
 
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
-
 import es.olgierd.vitomograph.utils.Helpers;
+import es.olgierd.vitomograph.utils.ImageProxy;
 
 public class Tomograph {
 
     private Lamp lamp;
     private DetectorArray detectorarray;
 
-    private BufferedImage img;
+    private ImageProxy img;
     private Point picLocation;
 
     private BufferedImage outputImageRaw;
@@ -32,7 +30,12 @@ public class Tomograph {
 
     public Tomograph(BufferedImage img, int numberOfDetectors, double beamWidth, int distance) {
 
-	this.img = img;
+//	this.img = img;
+	
+	this.img = new ImageProxy();
+	
+	this.img.loadImage(img);
+	
 	calculateRadius(distance);
 
 	lamp = new Lamp(radius);
@@ -87,7 +90,7 @@ public class Tomograph {
     }
 
     public BufferedImage getImage() {
-	return img;
+	return img.getInternalImage();
     }
 
     public double getRadius() {
@@ -120,64 +123,51 @@ public class Tomograph {
 
     public void getLine() {
 
+	// integer table, used to create preview
 	int tab[] = new int[detectorarray.getDetectors().size()];
+	
+	// double table, used to print to resulting table
 	double vals[] = new double[detectorarray.getDetectors().size()];
 
 	int i = 0;
 	for (Detector d : detectorarray.getDetectors()) {
 	    calculateSingleDetector(d);
-	    tab[i] = (int) d.getValue();
 	    vals[i] = (int) d.getValue();
 	    i++;
 	}
 
-	i = 0;
-///filter
-//	vals = Helpers.filterSignal(vals);
-//	for(i = 0; i<vals.length-1; i++) 
-//	    tab[i] = (int) vals[i];
-///filter
+	vals = Helpers.filterSignal(vals, 21, 1);
 	
-//	int min = 1000000000;
-//	for(i = 0; i<tab.length; i++)
-//	    if(tab[i] < min) min = tab[i];
+	double min = Helpers.getMinimal(vals);
 	
-//	for(i = 0; i<tab.length; i++) {
-//	    tab[i] -= min;
-//	    System.out.println(tab[i]);
-//	}
-	    
+	if (min < 0) {
+	    for (i = 0; i < vals.length; i++)
+		vals[i] -= min;
+	}
+	
+	double max = Helpers.getMaximal(vals);
+	
+	for (int j = 0; j < vals.length; j++) {
+	    tab[j] = (int)((255*vals[j]) / (max));
+	    if(tab[j] > 255) tab[j] = 255;
+	}
+
+	i=0;
+	
 	for (Detector d : detectorarray.getDetectors()) {
 	    drawToResultTable(lamp.getLocation(), d.getLocation(), vals[i]);
 	    i++;
-	}
-	//
-	int max = -1;
-
-	for (i = 0; i < tab.length; i++)
-	    if (tab[i] > max)
-		max = tab[i];
-
-	if (max == 0)
-	    max = 1;
-
-	for (i = 0; i < tab.length; i++) {
-	    tab[i] = (tab[i] * 255) / max;
 	}
 
 	for (i = 0; i < tab.length; i++) {
 	    outputImageRaw.setRGB(i, rotationAngle, tab[i] + (tab[i] << 8) + (tab[i] << 16));
 	}
-	// tu mamy tab przeskalowany do wartości max = 255
-
 	
 	currentReadoutImage.setData(clearImage.getData());
 	
 	for (i = 0; i < tab.length; i++) {
 	    currentReadoutImage.setRGB(i, 255-tab[i], 0xffffff);
 	}
-
-	//
 
 	calculated[rotationAngle] = true;
 
@@ -207,13 +197,13 @@ public class Tomograph {
 	    if (i > 0 && j > 0 && i < img.getWidth() && j < img.getHeight()) {
 
 		if (i % 1 == 0 && (int) i < img.getWidth() - 1 && (int) j < img.getHeight() - 1) {
-		    value = Helpers.rgbToGreyscale(img.getRGB((int) i, (int) j)) * (1 - (j % 1));
-		    value += Helpers.rgbToGreyscale(img.getRGB((int) i, (int) j + 1)) * (j % 1);
+		    value = (img.getRGB((int) i, (int) j)) * (1 - (j % 1));
+		    value += (img.getRGB((int) i, (int) j + 1)) * (j % 1);
 		}
 
 		if (j % 1 == 0 && (int) i < img.getWidth() - 1 && (int) j < img.getHeight() - 1) {
-		    value = Helpers.rgbToGreyscale(img.getRGB((int) i, (int) j)) * (1 - (i % 1));
-		    value += Helpers.rgbToGreyscale(img.getRGB((int) i + 1, (int) j)) * (i % 1);
+		    value = (img.getRGB((int) i, (int) j)) * (1 - (i % 1));
+		    value += (img.getRGB((int) i + 1, (int) j)) * (i % 1);
 		}
 	    }
 
@@ -306,21 +296,27 @@ public class Tomograph {
 
     public void makeOutputImage() {
 
-	double max = -1;
+	double max = Double.MIN_VALUE;
+	double min = Double.MAX_VALUE;
 
 	for (int i = 0; i < img.getWidth(); i++) {
 	    for (int j = 0; j < img.getHeight(); j++) {
 		if (resultsTab[i][j] > max)
 		    max = resultsTab[i][j];
+		if(resultsTab[i][j] < min)
+		    min = resultsTab[i][j];
 	    }
 	}
 
+	max = max - min;
+	
 	int val;
 
 	for (int i = 0; i < img.getWidth(); i++) {
 	    for (int j = 0; j < img.getHeight(); j++) {
-		val = (int) ((resultsTab[i][j] * 255) / max);
-
+		
+		val = (int) (((resultsTab[i][j] - min) * 255) / max);
+		
 		val = val + (val << 8) + (val << 16);
 		outputImage.setRGB(i, j, val);
 
@@ -334,7 +330,7 @@ public class Tomograph {
 
 	start = System.currentTimeMillis();
 
-	for (int i = 0; i < 361; i += 2) {
+	for (int i = 0; i < 361; i += 1) {
 	    loopstart = System.currentTimeMillis();
 
 	    rotateToAngle(i);

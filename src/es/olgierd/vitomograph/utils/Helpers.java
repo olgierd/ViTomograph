@@ -107,34 +107,63 @@ public class Helpers {
 		}
 	    }
 	    
-	    return outputTab;
+	    double[] croppedTab = new double[a.length];
+	    
+	    for(int i=b.length/2; i<a.length+b.length/2; i++) 
+		croppedTab[i-b.length/2] = outputTab[i]; 
+	    
+	    return croppedTab;
 	}
 
-	public static double[] makeFilter(int length) {
+	public static double[] makeFilter(int length, double coeff) {
 
-	    double filter[] = new double[11];
-//	    double filter[] = { -0.3, 1, -0.3 };
-		
-		//make filter
-		
-		for(int x=-5; x<5; x++) {
+	    double filter[] = new double[length];
+	    
+		for(int x=-length/2; x<length/2; x++) {
 		    
-		    if(x%2 == 1) {
-			filter[x+5] = (-4/(Math.PI*Math.PI))/(x*x);
+		    if(x%2 != 0) {
+			filter[x+length/2] = coeff * (-4/(Math.PI*Math.PI))/(x*x);
 		    }
 		    else if (x%2 == 0) {
-			filter[x+5] = 0;
+			filter[x+length/2] = 0;
 		    }
 		    
 		}
-	    filter[6] = 1;
+	    filter[length/2] = 1;
 	    
 	    return filter;
 	}
 	
-	public static double[] filterSignal(double tab[]) {
+	
+	public static double getMinimal(double[] tab) {
+	    
+	    double minimal = Double.MAX_VALUE;
+	    
+	    for (int i = 0; i < tab.length; i++) {
+		if(tab[i] < minimal) {
+		    minimal = tab[i];
+		}
+	    }
+	    
+	    return minimal;
+	}
+	
+	public static double getMaximal(double[] tab) {
+	    
+	    double maximal = Double.MIN_VALUE;
+	    
+	    for (int i = 0; i < tab.length; i++) {
+		if(tab[i] > maximal) {
+		    maximal = tab[i];
+		}
+	    }
+	    
+	    return maximal;
+	}
+	
+	public static double[] filterSignal(double tab[], int filterLength, double filterGainCoefficient) {
 
-	    return convoluteSignals(tab, makeFilter(tab.length));
+	    return convoluteSignals(tab, makeFilter(filterLength, filterGainCoefficient));
 	    
 	}
 }

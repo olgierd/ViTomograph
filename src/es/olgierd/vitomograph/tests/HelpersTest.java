@@ -1,7 +1,5 @@
 package es.olgierd.vitomograph.tests;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import es.olgierd.vitomograph.utils.Helpers;

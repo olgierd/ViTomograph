@@ -54,10 +54,10 @@ public class ViTomograph {
 	inputImageWindow.setVisible(true);
 	ins = inputImageWindow.getInsets();
 	d = inputImagePanel.getSize();
-	inputImageWindow.setResizable(false);
+	inputImageWindow.setResizable(true);
 	inputImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	inputImageWindow.setLocation(screenSize.width - inputImageWindow.getSize().width, 0);
 	inputImageWindow.setSize(d.width + ins.left + ins.right, d.height + ins.top + ins.bottom);
+	inputImageWindow.setLocation(screenSize.width - inputImageWindow.getSize().width, 0);
 
 	outputImagePanel = new OutputPanel(t);
 	outputImageWindow.add(outputImagePanel);
@@ -65,10 +65,10 @@ public class ViTomograph {
 	outputImageWindow.setTitle("Output image");
 	outputImageWindow.setVisible(true);
 	ins = outputImageWindow.getInsets();
-	outputImageWindow.setResizable(false);
+	outputImageWindow.setResizable(true);
 	outputImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	outputImageWindow.setLocation(screenSize.width / 2 - outputImageWindow.getSize().width / 2, 0);
 	outputImageWindow.setSize(imgWidth + ins.left + ins.right, imgHeight + ins.top + ins.bottom);
+	outputImageWindow.setLocation(screenSize.width / 2 - outputImageWindow.getSize().width / 2, 0);
 
 	rawImagePanel = new RawPanel(t);
 	rawImageWindow.add(rawImagePanel);
@@ -76,8 +76,8 @@ public class ViTomograph {
 	rawImageWindow.setTitle("Raw");
 	rawImageWindow.setVisible(true);
 	ins = rawImageWindow.getInsets();
-	rawImageWindow.setSize(numberOfDetectors + ins.left + ins.right, 361 + 260 + 10 + ins.top + ins.bottom);
-	rawImageWindow.setResizable(false);
+	rawImageWindow.setSize(numberOfDetectors, 361 + 260 + 10);
+	rawImageWindow.setResizable(true);
 	rawImageWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	rawImageWindow.setLocation(0, 0);
 
@@ -87,10 +87,10 @@ public class ViTomograph {
 	controlImageWindow.setTitle("ViTomograph by Olgierd Pilarczyk & Krzysztof Surdyk");
 	controlImageWindow.setVisible(true);
 	ins = controlImageWindow.getInsets();
-	controlImageWindow.setResizable(false);
+	controlImageWindow.setResizable(true);
 	controlImageWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	controlImageWindow.setLocation(screenSize.width / 2 - controlImageWindow.getSize().width / 2, outputImageWindow.getSize().width + 100);
 	controlImageWindow.setSize(500, 300);
+	controlImageWindow.setLocation(screenSize.width / 2 - controlImageWindow.getSize().width / 2, outputImageWindow.getSize().height + 50);
     }
 
     static void repaintWindows() {
@@ -102,37 +102,38 @@ public class ViTomograph {
     public static void main(String args[]) throws IOException {
 
 	BufferedImage inputImg = null;
-	numberOfDetectors = 300;
+	numberOfDetectors = 800;
 
-	/*
-	 * JFileChooser imageChooser = new JFileChooser();
-	 * FileNameExtensionFilter filter = new FileNameExtensionFilter(
-	 * "JPEG file", "jpg", "jpeg", ".png");
-	 * imageChooser.addChoosableFileFilter(filter);
-	 * 
-	 * int returnValue = JFileChooser.ERROR_OPTION; File f;
-	 * 
-	 * while (returnValue != JFileChooser.APPROVE_OPTION) { returnValue =
-	 * imageChooser.showOpenDialog(null); } f =
-	 * imageChooser.getSelectedFile();
-	 * 
-	 * inputImg = ImageIO.read(f);
-	 */
+	String userPath = System.getProperty("user.home");
+	JFileChooser imageChooser = new JFileChooser(userPath);
+	FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file", "jpg", "jpeg", "png", "gif", "bmp");
+	imageChooser.setFileFilter(filter);
 
-	 inputImg = ImageIO.read(new File("/home/oli/tomo.png"));
-//	 inputImg = ImageIO.read(new File("/home/oli/tomo2.png"));
-//	 inputImg = ImageIO.read(new File("/home/oli/dsc02249.png"));
-//	 inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
+	int returnValue = JFileChooser.ERROR_OPTION;
+	File f;
+
+	while (returnValue != JFileChooser.APPROVE_OPTION) {
+	    returnValue = imageChooser.showOpenDialog(null);
+	}
+	f = imageChooser.getSelectedFile();
+
+	inputImg = ImageIO.read(f);
+
+	// inputImg = ImageIO.read(new File("/home/oli/tomo.png"));
+	// inputImg = ImageIO.read(new File("/home/oli/tomo2.png"));
+	// inputImg = ImageIO.read(new File("/home/oli/dsc02249.png"));
+	// inputImg = ImageIO.read(new File("/home/oli/carbonare.jpg"));
 	// inputImg = ImageIO.read(new
 	// File("C:\\Users\\op798739\\Desktop\\MISC\\op798739.jpg"));
-//	 inputImg = ImageIO.read(new File("/home/oli/tomo3.png"));
+	// inputImg = ImageIO.read(new File("/home/oli/tomo3.png"));
 	// inputImg = ImageIO.read(new File("/home/oli/phantom.gif"));
-//	inputImg = ImageIO.read(new File("/home/lincoln2491/tm.jpg"));
-
-	t = new Tomograph(inputImg, 250, 160, 150);
+	// inputImg = ImageIO.read(new File("/home/lincoln2491/tm.jpg"));
 
 	imgWidth = inputImg.getWidth();
 	imgHeight = inputImg.getHeight();
+
+	t = new Tomograph(inputImg, numberOfDetectors, 160, 150);
+
 
 	SwingUtilities.invokeLater(new Runnable() {
 
