@@ -27,7 +27,7 @@ public class ControlPanel extends JPanel {
 
 		add(new JLabel("Sterowanie tomografem"));
 
-		createButtons(t);
+		createButton(t);
 
 		createRotationSlider(t);
 
@@ -82,7 +82,7 @@ public class ControlPanel extends JPanel {
 		tmpPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		add(tmpPanel);
 
-		Button applyContrast = new Button("Fix contrast");
+		Button applyContrast = new Button("Napraw kontrast");
 
 		applyContrast.addActionListener(new ActionListener() {
 
@@ -117,24 +117,11 @@ public class ControlPanel extends JPanel {
 		add(rotationSlider);
 	}
 
-	private void createButtons(final Tomograph t) {
+	private void createButton(final Tomograph t) {
 		JPanel tmpPanel = new JPanel();
 		tmpPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		add(tmpPanel);
-
-		Button test = new Button("test");
-
-		test.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				t.makeOutputImage();
-				ViTomograph.repaintWindows();
-			}
-		});
-		tmpPanel.add(test);
-
-		Button fullCapture = new Button("FULL");
+		Button fullCapture = new Button("Pełen skan");
 		fullCapture.setBounds(590, 80, 100, 30);
 
 		fullCapture.addActionListener(new ActionListener() {
@@ -147,5 +134,7 @@ public class ControlPanel extends JPanel {
 			}
 		});
 		tmpPanel.add(fullCapture);
+		
+		
 	}
 }
